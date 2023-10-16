@@ -1,0 +1,10 @@
+New York
+Los Angeles
+Chicago
+Miami
+London
+Paris
+Berlin
+Sydney
+Tokyo
+Beijing
