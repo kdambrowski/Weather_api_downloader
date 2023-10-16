@@ -6,41 +6,22 @@ from functions import *
 from setings import cities, waiting_time
 
 if __name__ == '__main__':
-    # a. Przygotuj plik konfiguracyjny z 10 dowolnymi miastami.
     filename = create_city_list_file("cities", cities)
-
-    # # zadanie b. Napisz kod w Python, pozwalający na pobranie z pliku konfiguracyjnego
-    # # informacje dla jakich miast będziemy pobierać dane z API
     print_city_from_config_file(filename)
 
-
-    # c. Napisz kod w Python, który będzie pozwalał na pobieranie danych
-    # o aktualnej pogodzie dla wskazanych w pliku konfiguracyjnym miast. Dodatkowe informacje
     cities = config_file_opener(filename)
     for city in cities:
         current_weather_data = get_weather_data(city, current_or_forecast= 'current')
         display_weather_info(city, current_weather_data)
 
-    # c.i. Otrzymane dane zapisz lokalnie w postaci JSON z podziałem na foldery Year/Month/Day/City
-    # c.ii. W przypadku wielokrotnego  uruchomienia w ciągu dnia, pliki nie powinny się nadpisywać,
-    # tylko powinno być wiele plików per jeden dzień.
     for city in cities:
         current_weather_data = get_weather_data(city, current_or_forecast= 'current')
         save_file_and_create_dir_structure(city, current_weather_data, current_or_forecast= 'current')
 
-
-    # d. Napisz kod w pythonie, który będzie pozwalał na pobieranie prognozy pogody dla
-    # wskazanych w pliku konfiguracyjnym miast. Dodatkowe Informacje:
-    # d.i. Otrzymane dane zapisz lokalnie w postaci JSON z podziałem na foldery Year/Month/Day/City
-    # d.ii. W przypadku wielokrotnego  uruchomienia w ciągu dnia, pliki nie powinny się nadpisywać
-    # tylko powinno być wiele plików per jeden dzień.
     for city in cities:
         forecast_weather_data = get_weather_data(city, current_or_forecast= 'forecast')
         save_file_and_create_dir_structure(city, forecast_weather_data, current_or_forecast= 'forecast')
 
-    # e. Wykonaj proszę porównanie, za pomocą dowolnej biblioteki pythonowej,
-    # jak dane na temat prognozy pokryły się z danymi aktualnymi. Porównanie temperatury, siły i kierunku wiatru,
-    # ciśnienie i wilgotność. Okres porównania jest dowolny może to być kilka godzin.
     date = datetime.now()
 
     column_list_for_combined = []
@@ -87,10 +68,6 @@ if __name__ == '__main__':
     combined_df.reset_index(drop=True, inplace=True)
     print(combined_df)
 
-    # f. Zadanie dodatkowe, zaproponuj wskaźnik wyliczany na podstawie porównywanych danych z punktu „e”,
-    # który będzie wskazywał na poziom pokrycia się prognozy z danymi rzeczywistymi.
-    # proponuje użyć mae = np.sum(np.abs(y_true - y_pred)) / n
-    # im wyższa wartość MAE tym większy jest błąd między predykcją a wartością faktyczną
     numeric_columns = combined_df.select_dtypes(include=['int', 'float']).columns.tolist()
     value_col = numeric_columns[:5]
     real_value = combined_df[combined_df['data_status'] == 'current']
