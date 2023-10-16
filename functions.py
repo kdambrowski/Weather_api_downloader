@@ -1,6 +1,7 @@
 import json
 import os
 from datetime import datetime
+import warnings
 
 import pandas as pd
 import requests
@@ -193,6 +194,7 @@ def data_preprocessing(df, add_column_feature= 'last_updated', is_current_data= 
     Returns:
         pd.DataFrame: The preprocessed DataFrame.
     """
+    warnings.filterwarnings("ignore")
     c_df = df[[add_column_feature] + features_list]
     if is_current_data:
         c_df = c_df.loc['text'::]
